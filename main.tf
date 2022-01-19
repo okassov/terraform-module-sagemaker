@@ -51,7 +51,7 @@ resource "aws_sagemaker_endpoint_configuration" "EndpointConfig" {
 
   production_variants {
     variant_name           = "AllTraffic"
-    model_name             = aws_sagemaker_model.Model.name
+    model_name             = aws_sagemaker_model.Model[0].name
     initial_instance_count = var.endpoint_instance_count
     instance_type          = var.endpoint_instance_type
     initial_variant_weight = var.endpoint_instance_variant_weight
