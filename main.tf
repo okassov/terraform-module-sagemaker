@@ -34,12 +34,12 @@ EOF
 resource "aws_sagemaker_model" "Model" {
   count = var.endpoint_deploy ? 1 : 0
 
-  //name               = format("%s-%s", var.project, var.name)
+  name               = format("%s-%s-%s", var.project, var.name, local.timestamp_sanitized)
   execution_role_arn = var.model_execution_role_arn
 
   primary_container {
-    image = var.model_inference_container_image
-    mode  = var.model_mode
+    image          = var.model_inference_container_image
+    mode           = var.model_mode
     model_data_url = var.model_data_url
   }
 }
