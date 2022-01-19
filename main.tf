@@ -1,25 +1,3 @@
-
-
-// resource "aws_iam_policy" "SageMakerModelExecutionPolicy" {
-//   name        = local.full_name
-//   description = "IAM Policy for SageMaker "
-
-//   policy = <<EOF
-// {
-//   "Version": "2012-10-17",
-//   "Statement": [
-//     {
-//       "Action": [
-//         "ec2:Describe*"
-//       ],
-//       "Effect": "Allow",
-//       "Resource": "*"
-//     }
-//   ]
-// }
-// EOF
-// }
-
 data "aws_iam_policy" "AmazonSageMakerFullAccessPolicy" {
   arn = "arn:aws:iam::aws:policy/AmazonSageMakerFullAccess"
 }
@@ -53,6 +31,19 @@ resource "aws_iam_role" "SageMakerModelExecutionRole" {
 EOF
 }
 
+resource "aws_sagemaker_model" "Model" {
+  count = var.endpoint_deploy ? 1 : 0
+
+  //name               = format("%s-%s", var.project, var.name)
+  execution_role_arn = var.model_execution_role_arn
+
+  primary_container {
+    image = var.model_inference_container_image
+    mode  = var.model_mode
+    model_data_url = var.model_data_url
+  }
+}
+
 resource "aws_sagemaker_endpoint_configuration" "EndpointConfig" {
   count = var.endpoint_deploy ? 1 : 0
 
@@ -60,7 +51,7 @@ resource "aws_sagemaker_endpoint_configuration" "EndpointConfig" {
 
   production_variants {
     variant_name           = "AllTraffic"
-    model_name             = var.model_package_name
+    model_name             = aws_sagemaker_model.Model.name
     initial_instance_count = var.endpoint_instance_count
     instance_type          = var.endpoint_instance_type
     initial_variant_weight = var.endpoint_instance_variant_weight

@@ -31,6 +31,27 @@ variable "model_package_name" {
   description = "SageMaker Model Package Name"
 }
 
+variable "model_execution_role_arn" {
+  type = string
+  description = "SageMaker Model Execution IAM Role ARN"
+}
+
+variable "model_inference_container_image" {
+  type = string
+  description = "SageMaker Model Inference Container Image"
+}
+
+variable "model_mode" {
+  type = string
+  description = "SageMaker Model Execution IAM Role ARN"
+  default = "SingleModel"
+}
+
+variable "model_data_url" {
+  type = string
+  description = "SageMaker S3 URL to Model artifact (tar.gz)"
+}
+
 variable "endpoint_instance_type" {
   type = string
   description = "SageMaker Endpoint Instance Type"
