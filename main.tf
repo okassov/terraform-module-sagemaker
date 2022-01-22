@@ -35,7 +35,7 @@ EOF
 resource "aws_sagemaker_model" "Model" {
   count = var.endpoint_deploy ? 1 : 0
 
-  name               = format("%s-%s-%s", var.project, var.name, local.timestamp_sanitized)
+  name               = local.full_name
   execution_role_arn = var.model_execution_role_arn
 
   primary_container {
@@ -43,6 +43,14 @@ resource "aws_sagemaker_model" "Model" {
     mode           = var.model_mode
     model_data_url = var.model_data_url
   }
+
+  tags = merge(
+    {
+      App = "sagemaker"
+    },
+    local.base_tags,
+    var.tags
+  )
 }
 
 
@@ -66,7 +74,6 @@ resource "aws_sagemaker_endpoint_configuration" "EndpointConfig" {
     local.base_tags,
     var.tags
   )
-
 }
 
 
