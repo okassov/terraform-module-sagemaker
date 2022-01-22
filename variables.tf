@@ -26,11 +26,6 @@ variable "endpoint_deploy" {
   default = true
 }
 
-variable "model_package_name" {
-  type = string
-  description = "SageMaker Model Package Name"
-}
-
 variable "model_execution_role_arn" {
   type = string
   description = "SageMaker Model Execution IAM Role ARN"
