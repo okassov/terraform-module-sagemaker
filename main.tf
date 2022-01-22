@@ -35,7 +35,7 @@ EOF
 resource "aws_sagemaker_model" "Model" {
   count = var.endpoint_deploy ? 1 : 0
 
-  name               = format("%s-%s-%s", var.project, var.name, local.timestamp)
+  name               = format("%s-%s-%s", var.project, var.name, local.timestamp_sanitized)
   execution_role_arn = var.model_execution_role_arn
 
   primary_container {
